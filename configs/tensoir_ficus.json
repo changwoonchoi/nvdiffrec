@@ -14,6 +14,6 @@
     "laplace_scale" : 3000,
     "display": [{"latlong" : true}, {"bsdf" : "kd"}, {"bsdf" : "ks"}, {"bsdf" : "normal"}],
     "background" : "white",
-    "out_dir": "tenoir_ficus",
+    "out_dir": "tensoir_ficus",
     "dataset": "tensoir"
 }

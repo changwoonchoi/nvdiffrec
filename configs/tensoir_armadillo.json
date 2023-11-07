@@ -14,6 +14,6 @@
     "laplace_scale" : 3000,
     "display": [{"latlong" : true}, {"bsdf" : "kd"}, {"bsdf" : "ks"}, {"bsdf" : "normal"}],
     "background" : "white",
-    "out_dir": "tenoir_armadillo",
+    "out_dir": "tensoir_armadillo",
     "dataset": "tensoir"
 }
