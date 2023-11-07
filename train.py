@@ -21,6 +21,7 @@ import xatlas
 from dataset.dataset_mesh import DatasetMesh
 from dataset.dataset_nerf import DatasetNERF
 from dataset.dataset_llff import DatasetLLFF
+from dataset.dataset_tensoir import DatasetTensoIR
 
 # Import topology / geometry trainers
 from geometry.dmtet import DMTetGeometry
@@ -501,6 +502,7 @@ if __name__ == "__main__":
     parser.add_argument('-bm', '--base-mesh', type=str, default=None)
     parser.add_argument('--validate', type=bool, default=True)
     parser.add_argument('--isosurface', default='dmtet', choices=['dmtet', 'flexicubes'])
+    parser.add_argument('--dataset', default='tensoir', type=str, choices=['tensoir', 'llff', 'nerf'])
     
     FLAGS = parser.parse_args()
 
@@ -569,12 +571,19 @@ if __name__ == "__main__":
         dataset_train    = DatasetMesh(ref_mesh, glctx, RADIUS, FLAGS, validate=False)
         dataset_validate = DatasetMesh(ref_mesh, glctx, RADIUS, FLAGS, validate=True)
     elif os.path.isdir(FLAGS.ref_mesh):
-        if os.path.isfile(os.path.join(FLAGS.ref_mesh, 'poses_bounds.npy')):
+        # if os.path.isfile(os.path.join(FLAGS.ref_mesh, 'poses_bounds.npy')):
+        if FLAGS.dataset == 'llff':
             dataset_train    = DatasetLLFF(FLAGS.ref_mesh, FLAGS, examples=(FLAGS.iter+1)*FLAGS.batch)
             dataset_validate = DatasetLLFF(FLAGS.ref_mesh, FLAGS)
-        elif os.path.isfile(os.path.join(FLAGS.ref_mesh, 'transforms_train.json')):
+        elif FLAGS.dataset == 'nerf':
+        # elif os.path.isfile(os.path.join(FLAGS.ref_mesh, 'transforms_train.json')):
             dataset_train    = DatasetNERF(os.path.join(FLAGS.ref_mesh, 'transforms_train.json'), FLAGS, examples=(FLAGS.iter+1)*FLAGS.batch)
             dataset_validate = DatasetNERF(os.path.join(FLAGS.ref_mesh, 'transforms_test.json'), FLAGS)
+        elif FLAGS.dataset == 'tensoir':
+            dataset_train    = DatasetTensoIR(os.path.join(FLAGS.ref_mesh, 'transforms_train.json'), FLAGS, examples=(FLAGS.iter+1)*FLAGS.batch)
+            dataset_validate = DatasetTensoIR(os.path.join(FLAGS.ref_mesh, 'transforms_test.json'), FLAGS)
+        else:
+            raise ValueError("Unknown dataset %s" % FLAGS.dataset)
 
     # ==============================================================================================
     #  Create env light with trainable parameters
