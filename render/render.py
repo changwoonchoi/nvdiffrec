@@ -85,7 +85,11 @@ def shade(
         else:
             assert False, "Invalid light type"
     elif bsdf == 'normal':
-        shaded_col = (gb_normal + 1.0)*0.5
+        shaded_col = torch.zeros_like(gb_normal)
+        shaded_col[..., 0] = gb_normal[..., 0]
+        shaded_col[..., 1] = -gb_normal[..., 2]
+        shaded_col[..., 2] = gb_normal[..., 1]
+        shaded_col = (shaded_col + 1.0)*0.5
     elif bsdf == 'tangent':
         shaded_col = (gb_tangent + 1.0)*0.5
     elif bsdf == 'kd':
