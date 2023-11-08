@@ -51,7 +51,7 @@ def load_obj(filename, clear_ks=True, mtl_override=None):
             if line.split()[0] == 'mtllib':
                 all_materials += material.load_mtl(os.path.join(obj_path, line.split()[1]), clear_ks) # Read in entire material library
     else:
-        all_materials += material.load_mtl(mtl_override)
+        all_materials += material.load_mtl(mtl_override, clear_ks=False)
 
     # load vertices
     vertices, texcoords, normals  = [], [], []
